@@ -1,0 +1,25 @@
+post:
+  description: Accepts email and password and returns tokens if user can be logged in
+  tags:
+    - Login
+  security: []
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: 'schemas.yaml#/AuthRequest'
+  responses:
+    200:
+      description: User can be logged in
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yaml#/TokenResponse'
+    400:
+      description: Bad request
+    default:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yaml#/MessageResponse'

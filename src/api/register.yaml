@@ -1,0 +1,21 @@
+post:
+  description: Registers user with email and password
+  tags:
+    - Register
+  security: []
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: 'schemas.yaml#/AuthRequest'
+  responses:
+    201:
+      description: User registered
+    400:
+      description: Bad request
+    default:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yaml#/MessageResponse'

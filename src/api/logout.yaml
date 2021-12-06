@@ -1,0 +1,21 @@
+delete:
+  description: Destroys user session and deletes assigned tokens
+  tags:
+    - Logout
+  security:
+    - BearerAuth: []
+  responses:
+    200:
+      description: User can be logged in
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yaml#/TokenResponse'
+    400:
+      description: Bad request
+    default:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yaml#/MessageResponse'

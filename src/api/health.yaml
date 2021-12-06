@@ -1,0 +1,18 @@
+get:
+  description: Gets health of the service
+  tags:
+    - Health
+  security: []
+  responses:
+    200:
+      description: Service is healthy
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yaml#/MessageResponse'
+    default:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yaml#/MessageResponse'

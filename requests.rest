@@ -1,0 +1,43 @@
+@authServiceHost = http://localhost:8000
+@contentType = application/json
+
+### Log user in and get tokens back
+# @name login
+POST {{authServiceHost}}/api/login
+Content-Type: {{contentType}}
+
+{
+  "email": "test@user.com",
+  "password": "Dev123!!!"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+@refreshToken = {{login.response.body.refreshToken}}
+
+### Verify tokens
+# @name verifyTokens
+POST {{authServiceHost}}/api/tokens/verify
+Content-Type: {{contentType}}
+Authorization: Bearer {{accessToken}}
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### Refresh access token using refresh token
+# @name refreshTokens
+POST {{authServiceHost}}/api/tokens/refresh
+Content-Type: {{contentType}}
+Authorization: Bearer {{accessToken}}
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### Log user out removing the refresh token - access token expires every 15s automatically
+# @name logout
+DELETE {{authServiceHost}}/api/logout
+Content-Type: {{contentType}}
+Authorization: Bearer {{accessToken}}

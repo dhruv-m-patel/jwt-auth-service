@@ -2,58 +2,33 @@ openapi: '3.0.3'
 info:
   version: 1.0.0
   title: jwt-auth-service
-  description: Node.js microservice with OpenAPI v3 specs for authentication using JWT tokens on a MySQL backend
+  description: An authentication service following JWT authentication strategy
 servers:
   - url: 'http://localhost:8000/api'
 tags:
   - name: Health
     description: Call to monitor the health of the service
+security:
+  - BearerAuth: []
 
 paths:
   /health:
-    get:
-      description: Gets health of the service
-      tags:
-        - Health
-      security: []
-      responses:
-        200:
-          description: Service is healthy
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MessageResponse'
-        default:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MessageResponse'
+    $ref: health.yaml
+  /login:
+    $ref: login.yaml
+  /register:
+    $ref: register.yaml
+  /tokens/refresh:
+    $ref: tokensRefresh.yaml
+  /tokens/verify:
+    $ref: tokensVerify.yaml
+  /logout:
+    $ref: logout.yaml
 
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
   schemas:
-    MessageResponse:
-      type: object
-      required:
-        - message
-      properties:
-        message:
-          type: string
-        extraInfo:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorMessage'
-
-    ErrorMessage:
-      type: object
-      required:
-        - message
-      properties:
-        type:
-          type: string
-        message:
-          type: string
-        property:
-          type: string
-        key:
-          type: string
+    $ref: schemas.yaml
