@@ -5,7 +5,7 @@
     "port": { "ENV": "DB_PORT" },
     "user": { "ENV": "DB_USER" },
     "password": { "ENV": "DB_PASS" },
-    "database": "jengadb",
+    "database": "jwtauthdb",
     "multipleStatements": true
   },
   "stage": {

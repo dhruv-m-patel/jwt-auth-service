@@ -51,7 +51,7 @@ async function start() {
       process.exit(1);
     } else {
       app.set('db', appDb);
-      runApp(app, Number(process.env.AUTH_SERVICE_PORT || 5000));
+      runApp(app, Number(process.env.PORT || 5000));
     }
   } catch (err) {
     console.error('DATABASE_ERROR: Error connecting to database', err);

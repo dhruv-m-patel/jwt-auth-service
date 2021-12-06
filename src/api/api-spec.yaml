@@ -4,7 +4,7 @@ info:
   title: jwt-auth-service
   description: An authentication service following JWT authentication strategy
 servers:
-  - url: 'http://localhost:8000/api'
+  - url: 'http://localhost:5000/api'
 tags:
   - name: Health
     description: Call to monitor the health of the service
