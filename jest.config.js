@@ -8,5 +8,8 @@ module.exports = {
   moduleFileExtensions: ['js', 'json', 'jsx', 'ts', 'tsx', 'node'],
   testEnvironment: 'node',
   testMatch: [path.join(__dirname, 'tests/**/*.test.ts')],
+  transform: {
+    '^.+\\.(ts)$': 'ts-jest',
+  },
   verbose: true,
 };
