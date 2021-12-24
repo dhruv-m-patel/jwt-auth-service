@@ -26,7 +26,7 @@ function getTokens(user: Omit<User, 'password'>): InternalTokenResponse {
     {
       data: user,
       exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXPIRY_MINUTES * 60,
-    }, // expire refresh tokens after 2 mins
+    }, // expire access tokens after 2 mins
     getAccessTokenSecret()
   );
   const refreshToken = jwt.sign(
