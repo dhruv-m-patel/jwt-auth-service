@@ -47,11 +47,22 @@ export interface UserWithoutPassword {
   guid: string;
 }
 
+export interface InternalTokenResponse {
+  accessToken: string;
+  accessTokenExpiry: Date;
+  accessTokenExpiresIn: number;
+  refreshToken: string;
+  refreshTokenExpiry: Date;
+  refreshTokenExpiresIn: number;
+}
+
 export interface TokenResponse {
   accessToken: string;
   accessTokenExpiry: string;
+  accessTokenExpiresIn: number;
   refreshToken: string;
   refreshTokenExpiry: string;
+  refreshTokenExpiresIn: number;
 }
 
 export interface MysqlTokenRecord {

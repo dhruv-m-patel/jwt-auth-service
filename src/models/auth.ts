@@ -3,30 +3,46 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { query, toMysqlDatetime } from '../lib/clients/mysql';
 import { add } from 'date-fns';
 import { v4 as uuidV4 } from 'uuid';
-import { MysqlTokenRecord, Request, TokenResponse, User } from '../types';
+import {
+  InternalTokenResponse,
+  MysqlTokenRecord,
+  Request,
+  TokenResponse,
+  User,
+} from '../types';
 import { getAccessTokenSecret, getRefreshTokenSecret } from '../lib/utils';
 
-function getTokens(user: Omit<User, 'password'>): {
-  accessToken: string;
-  accessTokenExpiry: Date;
-  refreshToken: string;
-  refreshTokenExpiry: Date;
-} {
-  const accessTokenExpiry = add(new Date(), { minutes: 2 });
-  const refreshTokenExpiry = add(new Date(), { minutes: 5 });
+const ACCESS_TOKEN_EXPIRY_MINUTES = 2;
+const REFRESH_TOKEN_EXPIRY_MINUTES = 24 * 60;
+
+function getTokens(user: Omit<User, 'password'>): InternalTokenResponse {
+  const accessTokenExpiry = add(new Date(), {
+    minutes: ACCESS_TOKEN_EXPIRY_MINUTES,
+  });
+  const refreshTokenExpiry = add(new Date(), {
+    minutes: REFRESH_TOKEN_EXPIRY_MINUTES,
+  });
   const accessToken = jwt.sign(
-    { data: user, exp: Math.floor(Date.now() / 1000) + 2 * 60 }, // expire refresh tokens after 2 mins
+    {
+      data: user,
+      exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXPIRY_MINUTES * 60,
+    }, // expire access tokens after 2 mins
     getAccessTokenSecret()
   );
   const refreshToken = jwt.sign(
-    { data: user, exp: Math.floor(Date.now() / 1000) + 5 * 60 }, // expire refresh tokens after 5 mins
+    {
+      data: user,
+      exp: Math.floor(Date.now() / 1000) + REFRESH_TOKEN_EXPIRY_MINUTES * 60,
+    }, // expire refresh tokens after 24 hours
     getRefreshTokenSecret()
   );
   return {
     accessToken,
     accessTokenExpiry,
+    accessTokenExpiresIn: ACCESS_TOKEN_EXPIRY_MINUTES * 1000,
     refreshToken,
     refreshTokenExpiry,
+    refreshTokenExpiresIn: REFRESH_TOKEN_EXPIRY_MINUTES * 1000,
   };
 }
 
@@ -34,12 +50,7 @@ export async function loginWithEmailAndPassword(
   req: Request,
   email: string,
   plainTextPassword: string
-): Promise<{
-  accessToken: string;
-  accessTokenExpiry: string;
-  refreshToken: string;
-  refreshTokenExpiry: string;
-}> {
+): Promise<TokenResponse> {
   const matchedRecords: User[] = await query(
     req,
     'SELECT * FROM users WHERE email=?',

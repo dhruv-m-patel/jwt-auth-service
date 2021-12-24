@@ -40,17 +40,25 @@ TokenResponse:
   required:
     - accessToken
     - accessTokenExpiry
+    - accessTokenExpiresIn
     - refreshToken
     - refreshTokenExpiry
+    - refreshTokenExpiresIn
   properties:
     accessToken:
       type: string
     accessTokenExpiry:
       type: string
+    accessTokenExpiresIn:
+      type: integer
+      format: int32
     refreshToken:
       type: string
     refreshTokenExpiry:
       type: string
+    refreshTokenExpiresIn:
+      type: integer
+      format: int32
 
 TokenValidationResponse:
   type: object
