@@ -22,16 +22,19 @@ function getTokens(user: Omit<User, 'password'>): InternalTokenResponse {
   const refreshTokenExpiry = add(new Date(), {
     minutes: REFRESH_TOKEN_EXPIRY_MINUTES,
   });
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const { password, ...userData } = user;
   const accessToken = jwt.sign(
     {
-      data: user,
+      data: userData,
       exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXPIRY_MINUTES * 60,
     }, // expire access tokens after 2 mins
     getAccessTokenSecret()
   );
   const refreshToken = jwt.sign(
     {
-      data: user,
+      data: userData,
       exp: Math.floor(Date.now() / 1000) + REFRESH_TOKEN_EXPIRY_MINUTES * 60,
     }, // expire refresh tokens after 24 hours
     getRefreshTokenSecret()
