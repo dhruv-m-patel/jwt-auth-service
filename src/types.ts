@@ -8,7 +8,6 @@ export interface AppOptions {
   appName?: string;
   apiOptions?: {
     apiSpec: string;
-    specType: 'openapi' | 'swagger';
     validateResponses?: boolean;
   };
   setup: (app: express.Application) => void;
