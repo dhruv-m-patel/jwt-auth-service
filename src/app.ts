@@ -11,11 +11,7 @@ import * as ExpressOpenApiValidator from 'express-openapi-validator';
 import jsyaml from 'js-yaml';
 import yamljs from 'yamljs';
 import { Application, AppOptions, Request, ResponseError } from './types';
-import healthRouter from './routes/health';
-import loginRouter from './routes/login';
-import logoutRouter from './routes/logout';
-import tokensRouter from './routes/tokens';
-import registerRouter from './routes/register';
+import apiRouter from './routes';
 
 function finalErrorHandler(
   err: ResponseError,
@@ -49,7 +45,7 @@ export function configureApp(options: AppOptions): express.Application {
 
   // Add service discovery to APIs
   if (apiOptions && apiOptions.apiSpec) {
-    const { apiSpec, specType, validateResponses = true } = apiOptions;
+    const { apiSpec, validateResponses = true } = apiOptions;
 
     // Provide Swagger UI for consumers to look at API specs
     app.use(express.static(SwaggerUiDist.getAbsoluteFSPath()));
@@ -94,15 +90,10 @@ const apiSpec = path.join(__dirname, '../build/api/api-spec.yaml');
 const app: Application = configureApp({
   apiOptions: {
     apiSpec,
-    specType: 'openapi',
     validateResponses: true,
   },
   setup: (theApp: Application) => {
-    theApp.use('/api/health', healthRouter);
-    theApp.use('/api/login', loginRouter);
-    theApp.use('/api/logout', logoutRouter);
-    theApp.use('/api/tokens', tokensRouter);
-    theApp.use('/api/register', registerRouter);
+    theApp.use('/api', apiRouter);
   },
 });
 
